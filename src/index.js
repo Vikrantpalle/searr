@@ -107,7 +107,7 @@ class Player {
   constructor(scene, x = 0, z = 0) {
     this.position = new THREE.Vector3(x, 0, z);
     this.height = 4;
-    var geometry = new THREE.BoxGeometry(1, this.height, 1);
+    var geometry = new THREE.CapsuleGeometry(1, this.height - 2, 5, 20);
     var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
     var body = new THREE.Mesh(geometry, material);
     this.body = body;
@@ -258,13 +258,11 @@ let delta = 0;
 
 function animate() {
   requestAnimationFrame(animate);
+  updatePosition();
+  renderer.render(scene, camera);
   delta += clock.getDelta();
-  if (delta > 1 / fps) {
-    updatePosition();
-    if (dc) dc.send(JSON.stringify(metadata));
-    renderer.render(scene, camera);
-    delta = delta % (1 / fps);
-  }
+  if (dc) dc.send(JSON.stringify(metadata));
+  delta = delta % (1 / fps);
 }
 
 window.addEventListener("resize", () => {
